@@ -6,6 +6,7 @@ import math
 from config import config
 from agent import Agent
 from obstacle import Obstacle
+import numpy as np
 import utils
 
 
@@ -14,14 +15,14 @@ class Simulation:
         self.height = height
         self.width = width
 
-        self.agent = Agent(position=(self.height / 2, self.width / 2))
+        self.agent = Agent(position=np.array([0.5, 0.5]))
 
-        self.obstacles = [Obstacle() for x in range(config['OBSTACLE_COUNT'])]
+        self.obstacles = [Obstacle(position=np.array([-5.0, 3.0]), velocity=np.array([1.0, 0.2])), Obstacle(position=np.array([5.0, 1.0]), velocity=np.array([-1.0, 0.4]))]
 
         dpg.create_context()
 
-        viewport_height = math.floor(utils.world_to_screen(self.height))
-        viewport_width = math.floor(utils.world_to_screen(self.width))
+        viewport_height = math.floor(utils.meters_to_pixels(self.height))
+        viewport_width = math.floor(utils.meters_to_pixels(self.width))
 
         dpg.create_viewport(title="Dynamic Navigation Exploration", width=viewport_width, height=viewport_height)
         dpg.setup_dearpygui()
@@ -29,12 +30,15 @@ class Simulation:
 
     def run(self):
         while dpg.is_dearpygui_running():
+            if dpg.does_item_exist('canvas'):
+                dpg.delete_item('canvas')
 
-            with dpg.viewport_drawlist():
+            with dpg.viewport_drawlist(tag='canvas'):
                 for obstacle in self.obstacles:
                     obstacle.step()
                     obstacle.draw()
 
+                self.agent.update(self.obstacles)
                 self.agent.draw()
 
             time.sleep(config['TIMESTEP'])

@@ -1,6 +1,5 @@
 from typing import TypedDict
 
-
 class ConfigDict(TypedDict):
     PIXELS_PER_METER: int
     ENVIRONMENT_WIDTH: int
