@@ -15,9 +15,12 @@ class Simulation:
         self.height = height
         self.width = width
 
-        self.agent = Agent(position=np.array([0.5, 0.5]))
+        self.agent = Agent(position=np.array([0.5, 0.5]), velocity=np.array([0.1, 0.1]))
 
-        self.obstacles = [Obstacle(position=np.array([-5.0, 3.0]), velocity=np.array([1.0, 0.2])), Obstacle(position=np.array([5.0, 1.0]), velocity=np.array([-1.0, 0.4]))]
+        self.obstacles = [Obstacle(position=np.array([-5.0, 3.0]), velocity=np.array([1.0, 0.2])),
+                          Obstacle(position=np.array([5.0, 1.0]), velocity=np.array([-1.0, 0.4])),
+                          Obstacle(position=np.array([-5.0, -3.0]), velocity=np.array([0.0, 0.0])),
+                          Obstacle(position=np.array([3.0, -3.0]), velocity=np.array([0.2, 0.5]))]
 
         dpg.create_context()
 
@@ -35,7 +38,7 @@ class Simulation:
 
             with dpg.viewport_drawlist(tag='canvas'):
                 for obstacle in self.obstacles:
-                    obstacle.step()
+                    obstacle.update()
                     obstacle.draw()
 
                 self.agent.update(self.obstacles)

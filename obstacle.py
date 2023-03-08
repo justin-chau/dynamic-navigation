@@ -26,14 +26,12 @@ class Obstacle:
         self.radius = radius
 
     def get_predicted_obstacle(self, n: int = 1):
-        position_x = self.position[0] + (self.velocity[0] * config['TIMESTEP'] * n)
-        position_y = self.position[1] + (self.velocity[1] * config['TIMESTEP'] * n)
+        predicted_position = self.position + (self.velocity * config['TIMESTEP'] * n)
 
-        return Obstacle(radius=config['OBSTACLE_RADIUS'], position=np.array([position_x, position_y]), velocity=self.velocity)
+        return Obstacle(radius=config['OBSTACLE_RADIUS'], position=predicted_position, velocity=self.velocity)
 
-    def step(self, n: int = 1):
-        self.position[0] = self.position[0] + (self.velocity[0] * config['TIMESTEP'] * n)
-        self.position[1] = self.position[1] + (self.velocity[1] * config['TIMESTEP'] * n)
+    def update(self, n: int = 1):
+        self.position = self.position + (self.velocity * config['TIMESTEP'] * n)
 
     def draw(self):
         dpg.draw_circle(radius=utils.meters_to_pixels(self.radius),

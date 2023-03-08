@@ -1,5 +1,9 @@
 from typing import TypedDict
 
+# TODO: Implement gap analysis
+# TODO: Experiment with pursuit guidance
+
+
 class ConfigDict(TypedDict):
     PIXELS_PER_METER: int
     ENVIRONMENT_WIDTH: int
