@@ -10,4 +10,4 @@ def meters_to_pixels(meters: int | float):
 
 
 def world_to_screen(position: np.array):
-    return meters_to_pixels(position[0] + config['ENVIRONMENT_WIDTH'] / 2), meters_to_pixels(position[1] * -1 + config['ENVIRONMENT_HEIGHT'] / 2)
+    return np.array([meters_to_pixels(position[0] + config['ENVIRONMENT_WIDTH'] / 2), meters_to_pixels(position[1] * -1 + config['ENVIRONMENT_HEIGHT'] / 2)])
