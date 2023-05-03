@@ -16,7 +16,7 @@ class AbstractObstacleTracker(ABC):
         self.horizon = horizon
 
     @abstractmethod
-    def update(self, obstacles: list[Obstacle], position: np.array = np.array([0.0, 0.0])):
+    def update(self, obstacles: list[Obstacle], position: np.array = np.array([0.0, 0.0])) -> list[tuple[float, float]]:
         pass
 
     @abstractmethod
@@ -109,7 +109,11 @@ class PursuitGuidanceCurvePair:
         self.mid_point_vector = self.a.points[-1] - self.b.points[-1]
         self.mid_point_vector = self.mid_point_vector / 2
 
-        self.is_valid = (a.get_start_angle_to_x() < b.get_start_angle_to_x() and a.get_end_angle_to_x() < b.get_end_angle_to_x()) or (a.get_start_angle_to_x() > b.get_start_angle_to_x() and a.get_end_angle_to_x() > b.get_end_angle_to_x())
+        self.mid_point = self.mid_point_vector + self.b.points[-1]
+
+        self.is_valid = (
+                                    a.get_start_angle_to_x() < b.get_start_angle_to_x() and a.get_end_angle_to_x() < b.get_end_angle_to_x()) or (
+                                    a.get_start_angle_to_x() > b.get_start_angle_to_x() and a.get_end_angle_to_x() > b.get_end_angle_to_x())
 
     def draw(self):
         dpg.draw_line(utils.world_to_screen(self.a.points[0]),
@@ -131,8 +135,8 @@ class PursuitGuidanceCurvePair:
 
         if self.is_valid:
             dpg.draw_circle(
-                          center=utils.world_to_screen(self.mid_point_vector + self.b.points[-1]), radius=5,
-                          fill=(0, 255, 0, 255))
+                center=utils.world_to_screen(self.mid_point), radius=5,
+                fill=(0, 255, 0, 255))
 
 
 class PursuitGuidanceTracker(AbstractObstacleTracker):
@@ -157,6 +161,14 @@ class PursuitGuidanceTracker(AbstractObstacleTracker):
             else:
                 self.pursuit_guidance_curve_pairs.append(
                     PursuitGuidanceCurvePair(self.pursuit_guidance_curves[i], self.pursuit_guidance_curves[0]))
+
+        goals = []
+
+        for curve in self.pursuit_guidance_curve_pairs:
+            if curve.is_valid:
+                goals.append(curve.mid_point)
+
+        return goals
 
     def draw(self):
         for i, pursuit_guidance_curve in enumerate(self.pursuit_guidance_curves):

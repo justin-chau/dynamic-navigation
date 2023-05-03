@@ -16,12 +16,12 @@ class Simulation:
         self.width = width
         self.is_running = True
 
-        self.agent = Agent(position=np.array([0.5, 0.5]), velocity=np.array([0.0, 0.0]))
+        self.agent = Agent(position=np.array([0.5, 0.5]), global_goal=np.array([4.5, 4.5]))
 
-        self.obstacles = [Obstacle(position=np.array([-5.0, 3.0]), velocity=np.array([1.0, 0.2])),
-                          Obstacle(position=np.array([5.0, 1.0]), velocity=np.array([-1.0, 0.4])),
-                          Obstacle(position=np.array([-5.0, -3.0]), velocity=np.array([0.3, -0.3])),
-                          Obstacle(position=np.array([3.0, -3.0]), velocity=np.array([0.2, 0.5]))]
+        self.obstacles = [Obstacle(position=np.array([3.0, -1.0]), velocity=np.array([0.0, 0.1])),
+                          Obstacle(position=np.array([1.0, 3.0]), velocity=np.array([-0.1, 0.0])),
+                          Obstacle(position=np.array([-1, -1]), velocity=np.array([0.15, -0.15])),
+                          Obstacle(position=np.array([3.0, -4.0]), velocity=np.array([0.1, 0.25]))]
 
         dpg.create_context()
 
